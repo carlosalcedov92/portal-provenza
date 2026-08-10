@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cafetería Provenza — Portal</title>
+<style>
+  :root{
+    --paper:#FFFFFF;
+    --paper-soft:#F3F7FD;
+    --blue:#1B4B91;
+    --blue-deep:#0F2F5C;
+    --blue-soft:#E3EDFA;
+    --green:#2E8B57;
+    --green-soft:#E3F3EA;
+    --ink:#1A2230;
+    --ink-soft:#5B6472;
+    --line:#DCE6F2;
+    --err:#B3261E;
+    --err-soft:#FBE9E7;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px;margin:0 auto;padding:0 0 60px;}
+  .hidden{display:none !important;}
+  .banner{
+    background:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+    color:#fff;padding:40px 20px 46px;border-radius:0 0 28px 28px;
+    text-align:center;box-shadow:0 6px 18px rgba(15,47,92,.25);
+  }
+  .banner .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#CFE0F7;margin:0 0 6px;font-weight:700;}
+  .banner h1{font-family:Georgia,'Times New Roman',serif;font-size:28px;margin:0;letter-spacing:.3px;}
+  .content{padding:0 20px;margin-top:-24px;}
+
+  .selector-card{
+    background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:26px 22px;box-shadow:0 10px 30px rgba(15,47,92,.08);
+  }
+  .selector-card label{
+    display:block;font-size:12px;font-weight:700;color:var(--blue);
+    margin:0 0 8px;text-transform:uppercase;letter-spacing:.5px;
+  }
+  select, input[type=password]{
+    width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;
+    font-size:16px;background:var(--paper-soft);color:var(--ink);
+  }
+  input[type=password]{text-align:center;letter-spacing:8px;font-size:22px;}
+  select:focus, input[type=password]:focus{outline:none;border-color:var(--blue);background:#fff;}
+  button{font:inherit;cursor:pointer;border:none;}
+  .btn-primary{
+    width:100%;margin-top:20px;padding:14px;background:var(--blue);color:#fff;
+    border-radius:12px;font-size:15px;font-weight:700;letter-spacing:.2px;
+    box-shadow:0 6px 16px rgba(27,75,145,.35);
+  }
+  .btn-primary:disabled{opacity:.5;cursor:default;box-shadow:none;}
+  .msg-err{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:13px;background:var(--err-soft);color:var(--err);}
+  .volver{
+    display:block;text-align:center;margin-top:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+
+  .card{
+    display:block;background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:20px 18px;box-shadow:0 10px 30px rgba(15,47,92,.08);
+    margin-bottom:16px;text-decoration:none;color:var(--ink);
+    transition:transform .15s ease;
+  }
+  .card:active{transform:scale(.98);}
+  .card .row{display:flex;align-items:center;gap:14px;}
+  .card .dot{
+    width:44px;height:44px;border-radius:12px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:700;color:#fff;
+  }
+  .card .txt{flex:1;}
+  .card .txt .name{font-weight:700;font-size:16px;margin-bottom:2px;}
+  .card .txt .desc{font-size:12px;color:var(--ink-soft);}
+  .card .arrow{color:var(--blue);font-size:20px;}
+
+  .dot.fiado{background:var(--blue);}
+  .dot.fiado-admin{background:var(--blue-deep);}
+  .dot.inventario{background:var(--green);}
+  .dot.ventas{background:#8B6F1B;}
+
+  .section-label{
+    font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:700;margin:24px 0 10px 4px;
+  }
+  .saludo{text-align:center;font-size:13px;color:var(--ink-soft);margin:18px 0 4px;}
+  .cambiar{
+    display:block;text-align:center;margin-top:8px;font-size:13px;
+    color:var(--blue);text-decoration:none;font-weight:600;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- PANTALLA 1: Selector de usuario -->
+  <div id="pantallaSelector">
+    <div class="banner">
+      <p class="eyebrow">Cafetería Provenza</p>
+      <h1>¿Quién eres?</h1>
+    </div>
+    <div class="content">
+      <div class="selector-card">
+        <label for="usuario">Selecciona tu nombre</label>
+        <select id="usuario">
+          <option value="">-- Selecciona --</option>
+          <option value="Carlos">Carlos</option>
+          <option value="Edwing">Edwing</option>
+          <option value="Candy">Candy</option>
+          <option value="Juli">Juli</option>
+        </select>
+        <button class="btn-primary" id="btnEntrar" disabled>Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA 1b: PIN (solo Carlos / Edwing) -->
+  <div id="pantallaPin" class="hidden">
+    <div class="banner">
+      <p class="eyebrow">Cafetería Provenza</p>
+      <h1>Ingresa tu PIN</h1>
+    </div>
+    <div class="content">
+      <div class="selector-card">
+        <label for="pin">PIN de acceso completo</label>
+        <input type="password" id="pin" inputmode="numeric" maxlength="6" placeholder="••••">
+        <button class="btn-primary" id="btnPinEntrar">Entrar</button>
+        <div class="msg-err hidden" id="pinError">PIN incorrecto</div>
+        <a href="#" class="volver" id="volverSelector">← Elegir otro nombre</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA 2: Lista de apps -->
+  <div id="pantallaApps" class="hidden">
+    <div class="banner">
+      <p class="eyebrow">Cafetería Provenza</p>
+      <h1>Nuestras apps</h1>
+    </div>
+    <div class="content">
+      <p class="saludo" id="saludo"></p>
+
+      <div id="grupoFiado">
+        <p class="section-label">Fiado</p>
+        <a class="card" href="https://script.google.com/macros/s/AKfycbyffNWDrz_erm0vTuoFFV8-tBpZAGqkojRUi2qTlzOhzV16S-17liE1PNH9pi8ANS6Ovw/exec" target="_blank" rel="noopener">
+          <div class="row">
+            <div class="dot fiado">📝</div>
+            <div class="txt">
+              <div class="name">Registrar fiado</div>
+              <div class="desc">Formulario para clientes (QR)</div>
+            </div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+        <a class="card" href="https://script.google.com/macros/s/AKfycbyffNWDrz_erm0vTuoFFV8-tBpZAGqkojRUi2qTlzOhzV16S-17liE1PNH9pi8ANS6Ovw/exec?page=admin" target="_blank" rel="noopener">
+          <div class="row">
+            <div class="dot fiado-admin">💳</div>
+            <div class="txt">
+              <div class="name">Panel de pagos</div>
+              <div class="desc">Marcar fiados como pagados (PIN)</div>
+            </div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      </div>
+
+      <p class="section-label">Operación</p>
+      <a class="card" href="https://carlosalcedov92.github.io/inventario-provenza/" target="_blank" rel="noopener">
+        <div class="row">
+          <div class="dot inventario">📋</div>
+          <div class="txt">
+            <div class="name">Inventario</div>
+            <div class="desc">Aseo, producción y servicio</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+      </a>
+      <div id="grupoVentas">
+        <a class="card" href="https://sunny-lokum-6133d5.netlify.app/" target="_blank" rel="noopener">
+          <div class="row">
+            <div class="dot ventas">💰</div>
+            <div class="txt">
+              <div class="name">Ventas y gastos</div>
+              <div class="desc">Registro diario 2026</div>
+            </div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      </div>
+
+      <a href="#" class="cambiar" id="cambiarUsuario">Cambiar usuario</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const PIN_ACCESO = '1234'; // cámbialo si quieres uno distinto al del panel de pagos
+  const STORAGE_KEY = 'provenza_usuario';
+  const TODO_ACCESO = ['Carlos', 'Edwing'];
+
+  const pantallaSelector = document.getElementById('pantallaSelector');
+  const pantallaPin = document.getElementById('pantallaPin');
+  const pantallaApps = document.getElementById('pantallaApps');
+  const usuarioSel = document.getElementById('usuario');
+  const btnEntrar = document.getElementById('btnEntrar');
+  let nombrePendiente = '';
+
+  function irASelector() {
+    pantallaApps.classList.add('hidden');
+    pantallaPin.classList.add('hidden');
+    pantallaSelector.classList.remove('hidden');
+    usuarioSel.value = '';
+    btnEntrar.disabled = true;
+  }
+
+  function irAPin(nombre) {
+    nombrePendiente = nombre;
+    document.getElementById('pin').value = '';
+    document.getElementById('pinError').classList.add('hidden');
+    pantallaSelector.classList.add('hidden');
+    pantallaPin.classList.remove('hidden');
+  }
+
+  function mostrarApps(nombre) {
+    document.getElementById('saludo').textContent = 'Hola, ' + nombre;
+    const tieneAcceso = TODO_ACCESO.includes(nombre);
+    document.getElementById('grupoFiado').classList.toggle('hidden', !tieneAcceso);
+    document.getElementById('grupoVentas').classList.toggle('hidden', !tieneAcceso);
+    pantallaSelector.classList.add('hidden');
+    pantallaPin.classList.add('hidden');
+    pantallaApps.classList.remove('hidden');
+  }
+
+  usuarioSel.addEventListener('change', () => {
+    btnEntrar.disabled = !usuarioSel.value;
+  });
+
+  btnEntrar.addEventListener('click', () => {
+    const nombre = usuarioSel.value;
+    if (!nombre) return;
+    if (TODO_ACCESO.includes(nombre)) {
+      irAPin(nombre);
+    } else {
+      localStorage.setItem(STORAGE_KEY, nombre);
+      mostrarApps(nombre);
+    }
+  });
+
+  document.getElementById('btnPinEntrar').addEventListener('click', () => {
+    const pin = document.getElementById('pin').value;
+    if (pin === PIN_ACCESO) {
+      localStorage.setItem(STORAGE_KEY, nombrePendiente);
+      mostrarApps(nombrePendiente);
+    } else {
+      document.getElementById('pinError').classList.remove('hidden');
+    }
+  });
+
+  document.getElementById('volverSelector').addEventListener('click', (e) => {
+    e.preventDefault();
+    irASelector();
+  });
+
+  document.getElementById('cambiarUsuario').addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem(STORAGE_KEY);
+    irASelector();
+  });
+
+  // Si ya había un nombre guardado en este teléfono:
+  const guardado = localStorage.getItem(STORAGE_KEY);
+  if (guardado) {
+    if (TODO_ACCESO.includes(guardado)) {
+      // Sigue pidiendo el PIN cada vez, aunque recuerde el nombre
+      irAPin(guardado);
+    } else {
+      mostrarApps(guardado);
+    }
+  }
+</script>
+</body>
+</html>
